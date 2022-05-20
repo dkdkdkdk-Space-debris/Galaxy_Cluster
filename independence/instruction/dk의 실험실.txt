@@ -1,0 +1,515 @@
+'''
+dkdkdkdk의 실험실
+미완성 코드들 모음집
+'''
+
+#dk 실험실
+
+'''
+def queue(id): #음악 재생용 큐
+    if que[id] != []:
+        player = que[id].pop(0)
+        playerlist[id] = player
+        del playlist[0]
+        player.start()
+@bot.command()
+async def p(ctx, url):
+    try:
+        channel = ctx.author.voice.channel
+        if bot.voice_clients == []:
+            await channel.connect()
+            await ctx.send("connected to the voice channel, " + str(bot.voice_clients[0].channel))
+        ydl_opts = {'format': 'bestaudio'}
+        FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'}
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            URL = info['formats'][0]['url']
+        voice = bot.voice_clients[0]
+        voice.play(discord.FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
+
+    except AttributeError:
+        await ctx.send("당신은 음성채팅방에 들어 와 있지않습니다")
+
+
+@bot.command()
+async def 일시정지(ctx):
+    try:
+        userchannel = str(ctx.author.voice.channel)
+        botchannel = str(bot.voice_clients[0].channel)
+
+        if botchannel == userchannel:
+            if not bot.voice_clients[0].is_paused():
+                bot.voice_clients[0].pause()
+            else:
+                await ctx.send("이미 일시정지중")
+    except AttributeError:
+        await ctx.send("당신은 음성채팅방에 들어 와 있지않습니다")
+
+@bot.command()
+async def 계속(ctx):
+    try:
+        userchannel = str(ctx.author.voice.channel)
+        botchannel = str(bot.voice_clients[0].channel)
+
+        if botchannel == userchannel:
+            if bot.voice_clients[0].is_paused():
+                bot.voice_clients[0].resume()
+            else:
+                await ctx.send("이미 재생중")
+    except AttributeError:
+        await ctx.send("당신은 음성채팅방에 들어 와 있지않습니다")
+
+@bot.command()
+async def 멈추기(ctx):
+    try:
+        userchannel = str(ctx.author.voice.channel)
+        botchannel = str(bot.voice_clients[0].channel)
+
+        if botchannel == userchannel:
+            if bot.voice_clients[0].is_playing():
+                bot.voice_clients[0].stop()
+            else:
+                await ctx.send("not playing")
+    except AttributeError:
+        await ctx.send("당신은 음성채팅방에 들어 와 있지않습니다")
+@bot.command()
+async def 떠나기(ctx):
+    try:
+        userchannel = str(ctx.author.voice.channel)
+        botchannel = str(bot.voice_clients[0].channel)
+
+        if botchannel == userchannel:
+            await bot.voice_clients[0].disconnect()
+    except AttributeError:
+        await ctx.send("당신은 음성채팅방에 들어 와 있지않습니다")
+
+
+
+operator = {'(': 4, ')': 4, '*': 2, '/': 2, '+': 3, '-': 3}
+
+
+def cal(t1, t, t2):
+    t1 = int(t1)
+    t2 = int(t2)
+    if t == '+':
+        return t1 + t2
+    elif t == '-':
+        return t1 - t2
+    elif t == '*':
+        return t1 * t2
+    elif t == '/':
+        return t1 // t2
+
+
+T = 10
+for a in range(1, T + 1):
+    #input()
+    #t_input = list(input())
+    stack_operater = []
+    stack_result = []
+
+
+@bot.command()
+async def test(ctx,*args):
+    T = 10
+    for a in range(1, T + 1):
+        stack_operater = []
+        stack_result = []
+    t=str(args)
+
+    # 숫자면 넣는다.
+    if '0' <= t <= '9':
+        stack_result.append(t)
+    # 여는 괄호거나 스택이 비어있거나 스탭탑이 여는 괄호라면 연산자 집어넣기
+    elif t == '(' or not len(stack_operater) or stack_operater[-1] == '(':
+        stack_operater.append(t)
+    # 들어온 연산자가 스택의 연산자보다 우선순위가 높다면 추가하기(낮은 수가 높은 우선순위)
+    elif operator[t] < operator[stack_operater[-1]] and t != ')':
+        stack_operater.append(t)
+    else:
+        # 위의 내용에 해당하지 않는다면
+        # 스택이 비지않거나 들어온 연산자가 스택의 탑보다 크거나 같을때까지 반복한다.
+        while len(stack_operater) and operator[t] >= operator[stack_operater[-1]]:
+            # 닫는 괄호라면 괄호없애고 정지한다.
+            if stack_operater[-1] == '(':
+                stack_operater.pop()
+                break
+            # 위의 조건에 해당하지 않는다면 결과 스택에 추가한다.
+            stack_result.append(stack_operater.pop())
+        # 반복이 끝난후 닫는괄호가 아닐때만 연산자스택에 추가하기
+        if t != ')':
+            stack_operater.append(t)
+
+    # 남은 연산자를 처리한다.
+    while len(stack_operater):
+        # 스택이 빌때까지 결과스택에 넣어준다.
+        temp = stack_operater.pop()
+        if temp != '(':
+            stack_result.append(temp)
+
+    # 후위연산 스택을 순회하면서 확인
+    for t in stack_result:
+        # 숫자라면 임시저장
+        if '0' <= t <= '9':
+            stack_operater.append(t)
+        else:
+            # 연산자면 2개를 꺼내서 계산한다.
+            t2 = stack_operater.pop()
+            t1 = stack_operater.pop()
+            stack_operater.append(cal(t1, t, t2))
+    else:
+        # 결과값 출력
+        print('#{} {}'.format(a, stack_operater[0]))
+
+@bot.command(pass_context=True)
+async def 가입(ctx):
+    await ctx.send("로그인중..")
+    author = str((ctx.author.id))
+    ws = ss.worksheet('test')
+    idcheckws = ss.worksheet('idcheck')
+    try:
+        ws.row_values(ws.find(author).row)
+        await ctx.send("서버와 연결중...")
+        embed=discord.Embed(title='이미 존재하는 유저입니다',colour=fleetColour)
+        await ctx.send(embed=embed)
+    except:
+        check = idcheckws.row_values(1)
+        check = "".join(check)
+        await ctx.send("서버와 연결중...")
+        check = int(check)
+        ws.insert_row([author, '1000', '5', 1], check)
+        await ctx.send('가입절차 처리중...')
+        idcount = eval(str(check) + "+ 1")
+        idcheckws.update_acell('A1', idcount)
+        embed = discord.Embed(title='가입완료', description="<@" + author + ">", colour=fleetColour)
+        embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+        await ctx.send(embed=embed)
+@bot.command(pass_context=True)
+async def 프로필(ctx):
+    await ctx.send("로그인중..")
+    author = str((ctx.author.id))
+    name = str(ctx.author.nick)
+    ws = ss.worksheet('test')
+    await ctx.send("서버 접속중...")
+    try:
+        num=ws.row_values(ws.find(author).row)
+        embed = discord.Embed(title=name+'님의 프로필입니다', colour=fleetColour)
+        embed.add_field(name='**보유 크레딧**', value=num[1])
+        embed.add_field(name='**바운티 등급**', value=num[2])
+        embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+        await ctx.send(embed=embed)
+    except:
+        embed = discord.Embed(title="당신은 가입한 유저가 아닙니다",description="!가입을 통해 회원가입해주세요")
+        await ctx.send(embed=embed)
+        
+@bot.command(pass_context=True)
+async def 리셋(ctx,*set):
+    await ctx.send("로그인중..")
+    author = str((ctx.author.id))
+    name = str(ctx.author.nick)
+    set = "".join(set)
+    if name == 'dkdkdkdk':
+        ws = ss.worksheet(set)
+        await ctx.send("서버 접속중...")
+        al='10000'
+        lala='700000'
+        line=random.randint(1,10)
+        row=random.randint(1,10)
+        for number in range(1,10)
+            if line==number:
+                line='A'
+            else:
+
+        print(line)
+        print(row)
+        #ws.update_acell(A1~~j10, num)
+    else:
+        await ctx.send('당신은 관리자 권한이 업습니다')
+        
+@bot.command(pass_context=True)
+async def 컨텐츠(ctx, *content):
+    await ctx.send("로그인중..")
+    author = str((ctx.author.id))
+    ws = ss.worksheet('test')
+    try:
+        ws.row_values(ws.find(author).row)
+        await ctx.send("서버 접속중...")
+        game="".join(content[0])
+        if game == '바운티':
+            win = random.randint(1,10)
+            await ctx.send("전투중..")
+            if win > 4:
+                player=ws.find(author).row
+                num = ws.row_values(ws.find(author).row)
+                player= str(player)
+                resultid = "B"+player
+                bountylev = "C" + player
+                viccount = "D" + player
+                originalval=str(num[1])
+                originallevel = int(num[2])
+                originalvic = int(num[3])
+                reward = random.randint(1, 16)
+                await ctx.send("전투결과 합산중...")
+                if reward==1 or reward==5 or reward==7 or reward==9 or reward==11 or reward==13 :
+                    reward='7000'
+                elif reward==2 or reward== 6 or reward==8 or reward==10:
+                    reward='9000'
+                elif reward==3 or reward==4 or reward==12:
+                    reward='10500'
+                elif reward==14 or reward==16:
+                    reward='13000'
+                elif reward==15:
+                    reward='14000'
+                if originallevel==1:
+                    pass
+                else:
+                    if originalvic % 7==0:
+                        changelevel=eval(str(originallevel)+'-1')
+                        ws.update_acell(bountylev, changelevel)
+                originalvic = str(num[3])
+                value= eval(originalval+'+'+reward)
+                vicup=eval(originalvic+'+ 1')
+                ws.update_acell(resultid, value)
+                ws.update_acell(viccount, vicup)
+                await ctx.send("시스템 로딩")
+                embed = discord.Embed(title='승리!!!', description='+'+reward+'만큼 크레딧을 획득하셨습니다',colour=discord.Colour.blurple())
+                embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                embed.set_image(
+                    url='')
+
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send("전투결과 합산중...")
+                player=ws.find(author).row
+                player= str(player)
+                resultid = "B"+player
+                num = ws.row_values(ws.find(author).row)
+                originalval=str(num[1])
+                reward = '2000'
+                value = eval(originalval + '-' + reward)
+                await ctx.send("시스템 로딩")
+                ws.update_acell(resultid, value)
+                embed = discord.Embed(title='패배...', description='수리비로 -'+reward+'만큼 크레딧을 사용하셨습니다',colour=discord.Colour.red())
+                embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                await ctx.send(embed=embed)
+        elif game == '무역':
+            try:
+                item=content[1]
+                price=content[2]
+                player = ws.find(author).row
+                player = str(player)
+                resultid = "B" + player
+                num = ws.row_values(ws.find(author).row)
+                originalval = str(num[1])
+                price = str(price)
+                pricediffer=eval(originalval+'-'+price)
+                if pricediffer< 0:
+                    embed = discord.Embed(title='보유 크레딧보다 더 많은 크레딧을 무역에 쓸수는 없습니다.')
+                    await ctx.send(embed=embed)
+                else:
+                    pirate=random.randint(1,100)
+                    k30=random.randint(1,100)
+                    if k30==79 or k30 == 15 or k30 == 25 or k30 == 35 or k30==45:
+                        ws.update_acell(resultid, pricediffer)
+                        embed=discord.Embed(title='ERROR - Disconnection (CODE 30000)',description='Connection Lost:\n'
+                                                                                                   'Connection to the server was lost unexpectedly\n'
+                                                                                                   'if the problem persists please check the internet connection',colour=discord.Colour.blurple())
+                        #embed.set_image(url='https://support.robertsspaceindustries.com/hc/article_attachments/360086771094/SC_Error20000-30000.jpg')
+                        await ctx.send(embed=embed)
+                    else:
+                        if item=='티타늄':
+                            sellprice='7'
+                            purchaseprice='7.8'
+                            scu = int(eval(price + '/' + sellprice))
+                            if scu < 9999999:
+                                if  pirate ==11 or pirate ==21 or pirate ==31 or pirate ==41 or pirate ==51:
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    scu = random.randint(200, scu)
+                                    scu = str(scu)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed=discord.Embed(title='무역 결과',colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='해적한테 뺐긴 SCU', value=scu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value+'-'+price), inline=True)
+                                    await ctx.send(embed=embed)
+                                else:
+                                    scu = str(scu)
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                            else:
+                                await ctx.send('**물량 초과 !!!**\n더 낮은가격으로 다시 입력해주세요')
+                        elif item=='다이아':
+                            sellprice = '9'
+                            purchaseprice = '10.5'
+                            scu = int(eval(price + '/' + sellprice))
+                            if scu < 9999999:
+                                if pirate ==12 or pirate ==22 or pirate ==32 or pirate ==42 or pirate ==52 or pirate ==62 or pirate ==72 or pirate ==82 or pirate ==92 or pirate ==2:
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    scu = random.randint(0, scu)
+                                    scu = str(scu)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='해적한테 뺐긴 SCU', value=scu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                                else:
+                                    scu = str(scu)
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                            else:
+                                await ctx.send('**물량 초과 !!!**\n더 낮은가격으로 다시 입력해주세요')
+                        elif item=='아그리슘':
+                            sellprice = '17'
+                            purchaseprice = '20.5'
+                            scu = int(eval(price + '/' + sellprice))
+                            if scu < 999999:
+                                if pirate ==13 or pirate ==23 or pirate ==33 or pirate ==43 or pirate ==53 or pirate ==63 or pirate ==73 or pirate ==83 or pirate ==93 or pirate ==3 or pirate ==61 or pirate ==71 or pirate ==81 or pirate ==91 or pirate ==1:
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    scu = random.randint(0, scu)
+                                    scu = str(scu)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='해적한테 뺐긴 SCU', value=scu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                                else:
+                                    scu = str(scu)
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                            else:
+                                await ctx.send('**물량 초과 !!!**\n더 낮은가격으로 다시 입력해주세요')
+                        elif item=='라라나이트':
+                            sellprice = '23'
+                            purchaseprice = '29'
+                            scu = int(eval(price + '/' + sellprice))
+                            if scu < 999999:
+                                if pirate ==14 or pirate ==24 or pirate ==34 or pirate ==44 or pirate ==54 or pirate ==64 or pirate ==74 or pirate ==84 or pirate ==94 or pirate ==4 or pirate ==15 or pirate ==25 or pirate ==35 or pirate ==45 or pirate ==55 or pirate ==65 or pirate ==75 or pirate ==85 or pirate ==95 or pirate ==5:
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    scu = random.randint(200, scu)
+                                    scu = str(scu)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='해적한테 뺐긴 SCU', value=scu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                                else:
+                                    scu = str(scu)
+                                    originalscu = scu
+                                    pricediffer = str(pricediffer)
+                                    value = str(int(eval(scu + '*' + purchaseprice)))
+                                    upvalue = eval(pricediffer + '+' + value)
+                                    ws.update_acell(resultid, upvalue)
+                                    embed = discord.Embed(title='무역 결과', colour=fleetColour)
+                                    embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                                    embed.add_field(name='구입가', value=price, inline=True)
+                                    embed.add_field(name='판매가', value=value, inline=True)
+                                    embed.add_field(name='SCU', value=originalscu, inline=True)
+                                    embed.add_field(name='얻은 이득', value=eval(value + '-' + price), inline=True)
+                                    await ctx.send(embed=embed)
+                            else:
+                                await ctx.send('**물량 초과 !!!**\n더 낮은가격으로 다시 입력해주세요')
+                        else:
+                            embed = discord.Embed(title='그 무역품은 없어요...')
+                            await ctx.send(embed=embed)
+            except:
+                embed = discord.Embed(title='컨텐츠 무역사용법',description='```1.!컨텐츠 무역 무역품 사용금액 순으로 적는다\n2.끝\n\n```**유의사항**\n```1. 무역품은 다이아 티타늄 아그리슘 라라나이트가 있으며 순서대로 비싸고 물량이 적습니다.'
+                                                                    '\n2. 무역품이 비쌀수록 해적한테 더 잘 뺐깁니다.\n3. 3만 랜덤으로 걸리며 걸리면 모든 무역품을 잃게 됩니다.``` ',colour=fleetColour)
+                embed.set_author(name='Trash Star Fleet', icon_url=fleeticon)
+                await ctx.send(embed=embed)
+
+    except:
+        embed = discord.Embed(title="당신은 가입한 유저가 아닙니다", description="!가입을 통해 회원가입해주세요")
+        await ctx.send(embed=embed)
+
+
+
+@bot.command(pass_context=True)
+async def 분리수거(ctx):
+    await ctx.send("네!! 분리수거에요!!")
+    
+
+class Voice(commands.Cog):
+
+    def init(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if after.channel != None:
+            if after.channel.name == "새 채널 생성+":
+                for guild in self.bot.guilds:
+                    chcategory = discord.utils.get(guild.categories, id=845160710539575328)
+                    channel2 = await guild.create_voice_channel(name=f'{member.display_name} 의 채널', category=chcategory)
+                    await channel2.set_permissions(member, connect=True, mute_members=True, manage_channels=True)
+                    await member.move_to(channel2)
+
+                    def check(x, y, z):
+                        return len(channel2.members) == 0
+
+                    await self.bot.wait_for('voice_state_update', check=check)
+                    await channel2.delete()
+
+def setup(bot):
+    bot.add_cog(Voice(bot))
+
+for filename in os.listdir("Cogs"):
+    if filename.endswith(".py"):
+        bot.load_extension(f"Cogs.{filename[:-3]}")
+'''

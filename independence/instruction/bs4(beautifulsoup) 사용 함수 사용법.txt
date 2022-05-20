@@ -1,0 +1,47 @@
+'''beautifulsoup를 이용한 웹 크롤링 방법
+
+깃허브 -> 코드
+'''
+
+#받아온 줄수에 LC라는 태그를 붙여줌 람다 함수(?)사용
+LineProcess = lambda line: "#LC" +line
+'''예) #LC + line(=1) = #LC1 (리턴)'''
+
+#함수인자 맨앞이랑 맨뒷값 받아와서 순차적으로 위에 람다 LineProcess에 넣어주는 함수
+def Listprocess (first,last):
+    resultlist = [""]
+    for num in range(first, last):
+        insertlist = ("")
+        insertlist = "{0}".format(num)
+        individual = LineProcess(insertlist)
+        individual = [individual]
+        resultlist = resultlist + individual
+    del resultlist[0]
+    return resultlist
+'''1 LineProcess 넣어주고 2 넣어주고 last까지 반복)'''
+
+#설명 가지고 오는 함수, 줄 수를 받아서 출력
+def contents(link,line):
+    url = link
+    response = requests.get(url)
+    html = response.text
+    soup = BeautifulSoup(html, 'html.parser')
+    for x in range(0, 1):
+        result = \
+        soup.select(line)[x].get_text()
+    result = result
+    print(type(result))
+    return result
+
+
+def planetFunction(link,colour,*data):
+    data=list(data)
+    result=[1,2,3,4,5]
+    for num in range(0,5):
+        result[num]=contents(link,data[num])
+    embed = discord.Embed(title=result[0],description=result[1],colour=colour)
+    embed.set_footer(text='Source By TWP, DK')
+    embed.set_author(name='Trash Star Fleet',icon_url=fleeticon)
+    embed.set_image(url=result[2])
+    embed.add_field(name=result[3], value=result[4],inline=True)
+    return embed

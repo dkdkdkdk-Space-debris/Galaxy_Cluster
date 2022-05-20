@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "redcomet-338205",
+  "private_key_id": "d825b8725833d68b8a7953d2cb6217a9f80aff30",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCuPeb0oXnr4VaE\nGhn0nv+bqKGrIwGKXIjJFxeRL3GyL0MV8H1eQw48P6q/nHfcgW0yyUo2ddYTWF45\n1wVqWhmG7/m51jS/qnzR9IbOLRRTwg2ajy1eZTzo45Ij6iUiuzQU0Fz6U3h4xfMT\ngf3Ntv2/HniAOgNCjZKVnVQEp54EEqrDhtAQxtUC/6kPy6r4+//yM3aeQC/ZKeYc\nQT1OEdv+kKEzvUyGxhV8NJVQ/bY9Wnn0FM5cJkjIII/ITiLM3mLuy9nLNRAelnjp\nQjuqjrX/gJzVgkI/jqoSOP98To2tQClS3aPWIa7cb3G4K2YnzuHfnCfwQNNicSLD\n21LHq4d9AgMBAAECggEASS94/ZGBi2EHnM71zfimtjPbS+2VLQ926LfJT1MVN1mA\nnQt5LQmPRiEb0AWhlr3KJwXDJSLTeyan1TWKccRMapALXVIqr8KlUO6bXKg0nIWq\nfxvaW4a8UbmcXXdwh6kH1CI8m2xJ8rh6Q9xaxXgyFn9u77TuP5sFUdBWROo+hci8\nAJlsYnibAYjYusPcGXxUchGX8J9i/MH4WrdhZD+Fejmmj5PYu6XtPi2WZc5FBt5t\nWdy8QBUNmHz0EeGBmTD+kIfs5+iK/sadCbGbSWzqYFfP4eqsueYXMf/u71tNcN8Z\nz4N3dkBOjg7ZTA6gof0MRKjxcGkVSIBrIMHfHqEGRQKBgQDVf2NyKJS3p5ATtnJJ\nhMiZRcuunzvoffxPjFyw150y0GCbWP5DSts7459oVYyn3fstCymv5QTbvDG8s+rr\nsVwQqyL0lxGo6/f3/By+YDmCYty/ZOgjwCggDrhe5banrBuNwNSCcUcYH5LeNpzG\nYdQ3vu6ID+P3+7ndrDorHK8HewKBgQDQ7eVKLGk7KYidzmlb+RfdUZKDtFzm1J4K\nziFs2wkcAAV6QCr1j158mG98prs780sPya3XLG4zO6e6/oleWMfvDoZG3TUXsH0L\nSc4k9YPqynDOXfzVDPA3AFudM0ukAqUBgspbHxZ0V9UYgXSdcVC29t0XMQ25/Ybd\n9qIdLqT/ZwKBgQCsva+W1GLP3hHjAUGjXn54FVLh7RCp4hXdvzHYG/yi+prP1seT\nZuPPpzJ5Vo7B3Ae4wElwehreN3z+s4wmO5DEI9PalsjBJnux+BjBqFWfu6Hkch6p\nnnZYydA/aBnLvKNmpFjNWh4t1I4eoY1jrg/pMuEI0eKf6NrQEuPVshWkNQKBgQCq\n4Ld0t+gFRE4BS03utEcpc0sSvxRwkpsEGV1LK8ZCiV3xg8Pe/Th5TS950uA2AyF0\nMy4kW6lx66uejAoMCS7UvZtjIA8JZgaPkfixT8Bp6tLiZgqgsalSQs+rPcXyyVrt\nZmxcpIt38lJObarUDlbGnhdrnWotoUaKCerDVWALpwKBgBzL7wkyH3mYko3QzP9j\n5qlSpVmChFS2882KqmPj+i08SVSm10o5FFOghYW4zqvMylv1cCfrMVHtyxwBvdRZ\nv3bBmRzqael47HPKK6t8SFPnveJYGe7wjxSfw4jLTRTjevRvZgxwPlPIJawbnRK4\na4pHZRyH6p0Ohq0jG3kW9SfC\n-----END PRIVATE KEY-----\n",
+  "client_email": "redcomet@redcomet-338205.iam.gserviceaccount.com",
+  "client_id": "102596984692674154448",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/redcomet%40redcomet-338205.iam.gserviceaccount.com"
+}
